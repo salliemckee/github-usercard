@@ -3,7 +3,13 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+import axios from "axios";
+const getCard = axios.get("https://api.github.com/users/salliemckee");
+// .then((resp) => {
+//   resp.data.message.forEach(())
+// })
+// .catch()
+// .finally();
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -16,7 +22,7 @@
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
-
+console.log(userCard(getCard));
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -49,6 +55,47 @@ const followersArray = [];
       </div>
     </div>
 */
+function userCard(obj) {
+  const card = document.createElement("div");
+  const cardImg = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const name = document.createElement("h3");
+  const userName = document.createElement("p");
+  const location = document.createElement("p");
+  const profile = document.createElement("p");
+  const address = document.createElement("a");
+  const followers = document.createElement("p");
+  const following = document.createElement("p");
+  const bio = document.createElement("p");
+
+  card.appendChild(cardImg);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  location.appendChild(address);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  name.classList.add("name");
+  userName.classList.add("username");
+
+  cardImg.src = obj.avatar_url;
+  name.textContent = obj.name;
+  userName.textContent = obj.login;
+  location.textContent = `Location: ${obj.location}`;
+  profile.textContent = `Profile: `;
+  address.textContent = obj.html_url;
+  followers.textContent = obj.followers_url;
+  following.textContent = obj.following_url;
+  bio.textContent = obj.bio;
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
