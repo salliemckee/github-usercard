@@ -4,12 +4,17 @@
     https://api.github.com/users/<your name>
 */
 import axios from "axios";
-const getCard = axios.get("https://api.github.com/users/salliemckee");
-// .then((resp) => {
-//   resp.data.message.forEach(())
-// })
-// .catch()
-// .finally();
+axios
+  .get("https://api.github.com/users/salliemckee")
+  .then((resp) => {
+    const newCard = userCard(resp.data);
+    const cardDiv = document.querySelector(".cards");
+    cardDiv.appendChild(newCard);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -22,7 +27,7 @@ const getCard = axios.get("https://api.github.com/users/salliemckee");
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
-console.log(userCard(getCard));
+
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -34,8 +39,31 @@ console.log(userCard(getCard));
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell",
+];
 
+const getOtherUsers = (arr) => {
+  arr.forEach((user) => {
+    axios
+      .get(`https://api.github.com/users/${user}`)
+      .then((resp) => {
+        const newCard = userCard(resp.data);
+        const cardDiv = document.querySelector(".cards");
+        cardDiv.appendChild(newCard);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+};
+
+getOtherUsers(followersArray);
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
     Using DOM methods and properties, create and return the following markup:
@@ -73,7 +101,7 @@ function userCard(obj) {
   cardInfo.appendChild(name);
   cardInfo.appendChild(userName);
   cardInfo.appendChild(location);
-  location.appendChild(address);
+  profile.appendChild(address);
   cardInfo.appendChild(profile);
   cardInfo.appendChild(followers);
   cardInfo.appendChild(following);
@@ -88,10 +116,9 @@ function userCard(obj) {
   name.textContent = obj.name;
   userName.textContent = obj.login;
   location.textContent = `Location: ${obj.location}`;
-  profile.textContent = `Profile: `;
-  address.textContent = obj.html_url;
-  followers.textContent = obj.followers_url;
-  following.textContent = obj.following_url;
+  profile.textContent = `Profile: ${(address.textContent = obj.html_url)}`;
+  followers.textContent = obj.followers;
+  following.textContent = obj.following;
   bio.textContent = obj.bio;
 
   return card;
